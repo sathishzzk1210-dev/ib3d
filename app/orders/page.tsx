@@ -17,19 +17,54 @@ export default function OrdersPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
 
+  // useEffect(() => {
+  //   async function fetchOrders() {
+  //     setLoading(true);
+  //     const res = await api.getAllOrders(1, 20); // page=1, limit=20
+  //     if (res.data) {
+  //       setOrders(res.data.orders); // depends on your backend response shape
+  //     } else {
+  //       console.error(res.error);
+  //     }
+  //     setLoading(false);
+  //   }
+  //   fetchOrders();
+  // }, []);
+
   useEffect(() => {
-    async function fetchOrders() {
-      setLoading(true);
-      const res = await api.getAllOrders(1, 20); // page=1, limit=20
-      if (res.data) {
-        setOrders(res.data.orders); // depends on your backend response shape
-      } else {
-        console.error(res.error);
-      }
-      setLoading(false);
+  async function fetchOrders() {
+    setLoading(true);
+    const res = await api.getAllOrders(1, 20); // page=1, limit=20
+
+    if (res?.data) {
+      const fetchedOrders = Array.isArray(res.data)
+        ? res.data
+        : res.data.orders || [];
+      setOrders(fetchedOrders);
+    } else {
+      console.error(res?.error || "Failed to fetch orders");
+      setOrders([]);
     }
-    fetchOrders();
-  }, []);
+
+    setLoading(false);
+  }
+  fetchOrders();
+}, []);
+
+// Safe filter usage
+const filteredOrders = (orders || []).filter((order) => {
+  const matchesSearch =
+    order.id.toString().includes(searchTerm.toLowerCase()) ||
+    order.files?.some((file: any) =>
+      file.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
+  const matchesStatus =
+    statusFilter === 'all' || order.status === statusFilter;
+
+  return matchesSearch && matchesStatus;
+});
+
 
   const getStatusColor = (status: string) => {
     const colors: Record<string, string> = {
@@ -67,18 +102,18 @@ export default function OrdersPage() {
     return icons[status] || Clock;
   };
 
-  const filteredOrders = orders.filter((order) => {
-    const matchesSearch =
-      order.id.toString().includes(searchTerm.toLowerCase()) ||
-      order.files?.some((file: any) =>
-        file.name.toLowerCase().includes(searchTerm.toLowerCase())
-      );
+  // const filteredOrders = orders.filter((order) => {
+  //   const matchesSearch =
+  //     order.id.toString().includes(searchTerm.toLowerCase()) ||
+  //     order.files?.some((file: any) =>
+  //       file.name.toLowerCase().includes(searchTerm.toLowerCase())
+  //     );
 
-    const matchesStatus =
-      statusFilter === 'all' || order.status === statusFilter;
+  //   const matchesStatus =
+  //     statusFilter === 'all' || order.status === statusFilter;
 
-    return matchesSearch && matchesStatus;
-  });
+  //   return matchesSearch && matchesStatus;
+  // });
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
