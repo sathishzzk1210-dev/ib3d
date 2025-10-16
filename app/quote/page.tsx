@@ -23,7 +23,14 @@ const steps = [
 
 export default function QuotePage() {
   const [currentStep, setCurrentStep] = useState<Step>('purpose');
-  const [quoteData, setQuoteData] = useState({
+  const [quoteData, setQuoteData] = useState<{
+    purpose: string;
+    files: any[];
+    material: string;
+    options: Record<string, any>;
+    contact: Record<string, any>;
+    quote: any | null;
+  }>({
     purpose: '',
     files: [],
     material: '',

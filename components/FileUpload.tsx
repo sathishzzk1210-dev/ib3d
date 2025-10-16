@@ -24,11 +24,12 @@ export default function FileUpload({ onFilesChange }: FileUploadProps) {
   const onDrop = useCallback((acceptedFiles: File[]) => {
     setIsProcessing(true);
     
-    const newFiles: FileWithPreview[] = acceptedFiles.map(file => ({
-      ...file,
-      id: Math.random().toString(36).substr(2, 9),
-      preview: URL.createObjectURL(file)
-    }));
+    const newFiles: FileWithPreview[] = acceptedFiles.map(file => {
+      const f = file as FileWithPreview;
+      f.id = Math.random().toString(36).substr(2, 9);
+      f.preview = URL.createObjectURL(file);
+      return f;
+    });
 
     setTimeout(() => {
       const updatedFiles = [...files, ...newFiles];
