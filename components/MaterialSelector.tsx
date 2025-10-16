@@ -51,13 +51,23 @@ const postProcessing = [
   { id: 'vapor', name: 'Vapor Smoothing', price: '₹200/part', description: 'Chemical smoothing for ABS' }
 ];
 
+interface Options {
+  material: string;
+  color: string;
+  layerHeight: number[];
+  infill: number[];
+  supports: boolean;
+  quantity: number;
+  postProcessing: string[];
+}
+
 interface MaterialSelectorProps {
-  onOptionsChange: (options: any) => void;
+  onOptionsChange: (options: Options) => void;
 }
 
 export default function MaterialSelector({ onOptionsChange }: MaterialSelectorProps) {
-  const [selectedMaterial, setSelectedMaterial] = useState('pla');
-  const [options, setOptions] = useState({
+  const [selectedMaterial, setSelectedMaterial] = useState<string>('pla');
+  const [options, setOptions] = useState<Options>({
     material: 'pla',
     color: 'White',
     layerHeight: [0.2],
@@ -67,7 +77,7 @@ export default function MaterialSelector({ onOptionsChange }: MaterialSelectorPr
     postProcessing: []
   });
 
-  const updateOptions = (newOptions: any) => {
+  const updateOptions = (newOptions: Partial<Options>) => {
     const updated = { ...options, ...newOptions };
     setOptions(updated);
     onOptionsChange(updated);
