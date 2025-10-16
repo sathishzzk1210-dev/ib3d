@@ -107,7 +107,7 @@ export default function ProfilePage() {
   };
 
   const getStatusColor = (status: string) => {
-    const colors = {
+    const colors: Record<string, string> = {
       'printing': 'bg-blue-600',
       'delivered': 'bg-green-600',
       'shipped': 'bg-purple-600'
