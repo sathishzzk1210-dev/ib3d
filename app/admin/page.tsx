@@ -49,7 +49,7 @@ export default function AdminPage() {
   const [activeTab, setActiveTab] = useState('overview');
 
   const getStatusColor = (status: string) => {
-    const colors = {
+    const colors: Record<string, string> = {
       'printing': 'bg-blue-600',
       'review': 'bg-yellow-600',
       'shipped': 'bg-green-600',
@@ -57,11 +57,11 @@ export default function AdminPage() {
       'idle': 'bg-gray-400',
       'maintenance': 'bg-red-600'
     };
-    return colors[status] || 'bg-gray-400';
+    return colors[status] ?? 'bg-gray-400';
   };
 
   const getStatusLabel = (status: string) => {
-    const labels = {
+    const labels: Record<string, string> = {
       'printing': 'Printing',
       'review': 'In Review',
       'shipped': 'Shipped',
